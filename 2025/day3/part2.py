@@ -8,19 +8,24 @@ def getHighestJoltage(file_path):
     return totalJoltage
 
 def findHighestJoltage(battery_bank):
-    highest = [None] * 12
+    battery_amount = 12
+    highest = [None] * battery_amount
     bank_size = len(battery_bank)
 
+    # loop through each battery
     for i in range(bank_size):
         battery = battery_bank[i]
-
         # loop through each spot
-        for j in range(len(highest)):
+        for j in range(battery_amount):
+
+            batteries_left = bank_size-(i+1)
+            spots_left = battery_amount-(j+1)
+
             if highest[j] == None:
                 highest[j] = battery
                 break
-            elif battery > highest[j] and 12-j-1 > 0:
-                highest = highest[:j] + [battery] + [None]*(12-j)
+            elif battery > highest[j] and batteries_left >= spots_left:
+                highest = highest[:j] + [battery] + [None]*spots_left
                 break
     
     joltage = ''
@@ -31,7 +36,7 @@ def findHighestJoltage(battery_bank):
 
 
 print(findHighestJoltage('987654321111111')) # 987654321111 987654321111
-print(findHighestJoltage('811111111111119')) # 811111111119 811111111111
-print(findHighestJoltage('234234234234278')) # 434234234278 234234234234
-print(findHighestJoltage('818181911112111')) # 888911112111 818181911112
+print(findHighestJoltage('811111111111119')) # 811111111119 811111111119
+print(findHighestJoltage('234234234234278')) # 434234234278 434234234278
+print(findHighestJoltage('818181911112111')) # 888911112111 888911112111
 print(getHighestJoltage("2025\day3\input.txt"))
