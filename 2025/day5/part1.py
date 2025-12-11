@@ -2,8 +2,6 @@
 def getFreshIngredients(file_path):
     with open(file_path, 'r') as database:
         database_list = database.read().splitlines()
-        for line in database_list:
-            print(line)
         split_index = database_list.index('')
         fresh_ranges = database_list[:split_index]
         ingredients = database_list[split_index+1:]
@@ -11,22 +9,22 @@ def getFreshIngredients(file_path):
     return fresh_ingredients
 
 def countFreshIngredients(fresh_ranges, ingredients):
-    fresh = set()
+    fresh = dict() # lo: hi
     for fresh_range in fresh_ranges:
         split_index = fresh_range.find('-')
         lo = int(fresh_range[:split_index])
         hi = int(fresh_range[split_index+1:])
-        for num in range(lo, hi+1):
-            fresh.add(num)
+        fresh[lo] = hi
 
-    print('set')
-    print(fresh)
-    
     fresh_ingredients = 0
     for ingredient in ingredients:
-        if ingredient in fresh:
-            fresh_ingredients += 1
+        ingredient = int(ingredient)
+        for lo in fresh:
+            if lo <= ingredient and fresh[lo] >= ingredient:
+                fresh_ingredients += 1
+                print(f'{lo} < {ingredient} < {fresh[lo]}')
+                break
     return fresh_ingredients
 
-#print(getFreshIngredients(r"2025\day4\test.txt"))
+print(getFreshIngredients(r"2025\day5\test.txt"))
 print(getFreshIngredients("2025\day5\input.txt"))
